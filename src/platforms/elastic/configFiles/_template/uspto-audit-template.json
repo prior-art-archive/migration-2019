@@ -1,0 +1,36 @@
+{
+  "order": 0,
+  "template": "[audit-idx-*]",
+  "settings": {},
+  "mappings": {
+    "doc": {
+      "properties": {
+        "companyid": {
+          "type": "keyword"
+        },
+        "companyname": {
+          "type": "keyword"
+        },
+        "dateuploaded": {
+          "type": "date"
+        },
+        "fileid": {
+          "type": "keyword"
+        },
+        "sourcepath": {
+          "type": "keyword"
+        },
+        "title": {
+          "type": "keyword"
+        },
+        "url": {
+          "type": "keyword"
+        },
+        "audit-flag": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "aliases": {}
+}
