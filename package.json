@@ -10,8 +10,8 @@
     "build": "babel src -d lib",
     "lint": "./node_modules/.bin/eslint 'src/**/*.js'",
     "test": "",
-    "elastic:get": "babel-node -- src/platforms/elastic/scripts/get",
-    "elastic:configure": "babel-node -- src/platforms/elastic/scripts/configure"
+    "elastic:config:get": "babel-node -- src/platforms/elastic/scripts/getConfig",
+    "elastic:config:put": "babel-node -- src/platforms/elastic/scripts/putConfig"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
