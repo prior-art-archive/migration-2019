@@ -1,0 +1,115 @@
+{
+  "order": 0,
+  "template": "idx-*",
+  "settings": {
+    "index": {
+      "analysis": {
+        "filter": {
+          "hyphen_delmiter_filter": {
+            "split_on_numerics": "false",
+            "split_on_case_change": "false",
+            "type": "word_delimiter",
+            "preserve_original": "true",
+            "stem_english_possessive": "false"
+          },
+          "hyphen_filter": {
+            "split_on_numerics": "false",
+            "split_on_case_change": "false",
+            "type": "word_delimiter",
+            "type_table": [
+              "- => ALPHANUM",
+              ". => ALPHANUM"
+            ],
+            "stem_english_possessive": "false"
+          }
+        },
+        "normalizer": {
+          "lowercase_normalizer": {
+            "filter": [
+              "lowercase"
+            ],
+            "type": "custom"
+          }
+        },
+        "analyzer": {
+          "hyphen_analyzer": {
+            "filter": [
+              "hyphen_filter",
+              "hyphen_delmiter_filter",
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "whitespace"
+          }
+        }
+      },
+      "number_of_shards": "5",
+      "mapping": {
+        "total_fields": {
+          "limit": "5000"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "custom_meta_data": {
+          "properties": {
+            "companyid": {
+              "type": "keyword"
+            },
+            "customFileType": {
+              "type": "keyword"
+            },
+            "companyname": {
+              "type": "keyword"
+            },
+            "publishDate": {
+              "type": "keyword"
+            },
+            "title": {
+              "copy_to": "search_content",
+              "type": "text",
+              "analyzer": "hyphen_analyzer"
+            },
+            "url": {
+              "type": "keyword"
+            },
+            "fileid": {
+              "type": "keyword"
+            },
+            "sourcepath": {
+              "type": "keyword"
+            }
+          }
+        },
+        "file": {
+          "properties": {
+            "extension": {
+              "type": "keyword"
+            }
+          }
+        },
+        "cpccodes": {
+          "type": "keyword",
+          "normalizer": "lowercase_normalizer"
+        },
+        "search_content": {
+          "store": true,
+          "type": "text",
+          "analyzer": "hyphen_analyzer"
+        },
+        "content": {
+          "copy_to": "search_content",
+          "type": "text",
+          "analyzer": "hyphen_analyzer"
+        }
+      }
+    }
+  },
+  "aliases": {
+    "uspto": {},
+    "uspto-{index}": {}
+  }
+}

@@ -1,0 +1,321 @@
+{
+  "description": "Converts fscrawler crawled docs into uspto searchable docs",
+  "processors": [
+    {
+      "script": {
+        "lang": "painless",
+        "source": "if (params.extension1.contains(ctx.file.extension)) {ctx.custom_meta_data.customFileType = params.custom1} else if (params.extension2.contains(ctx.file.extension)) {ctx.custom_meta_data.customFileType = params.custom2} else if (params.extension3.contains(ctx.file.extension)) {ctx.custom_meta_data.customFileType = params.custom3}else if (params.extension4.contains(ctx.file.extension)) {ctx.custom_meta_data.customFileType = params.custom4}else if (params.extension5.contains(ctx.file.extension)) {ctx.custom_meta_data.customFileType = params.custom5} else if (params.extension6.contains(ctx.file.extension)) {ctx.custom_meta_data.customFileType = params.custom6}else {ctx.custom_meta_data.customFileType =params.custom7}",
+        "params": {
+          "extension1": [
+            "html",
+            "htm"
+          ],
+          "extension2": [
+            "pdf",
+            "PDF"
+          ],
+          "extension3": [
+            "ppt",
+            "pot",
+            "pps",
+            "pptx",
+            "potx",
+            "pptm",
+            "potm",
+            "ppsx",
+            "ppam",
+            "ppsm"
+          ],
+          "extension4": [
+            "xls",
+            "xlt",
+            "xlsx",
+            "xltx",
+            "xlsm",
+            "xltm",
+            "xlsb",
+            "xlam"
+          ],
+          "extension5": [
+            "docx",
+            "dotx",
+            "docm",
+            "dotm",
+            "txt",
+            "ini",
+            "props",
+            "properties",
+            "text",
+            "c",
+            "c++",
+            "conf",
+            "cpp",
+            "css",
+            "cxx",
+            "h",
+            "hh",
+            "js",
+            "log",
+            "lst",
+            "pas",
+            "pl",
+            "s",
+            "sh",
+            "tsv",
+            "uri",
+            "uris",
+            "wmls",
+            "dtd",
+            "java",
+            "jsf",
+            "jav",
+            "nt",
+            "pv",
+            "latex",
+            "tex",
+            "faq",
+            "csv",
+            "asc",
+            "ans",
+            "me"
+          ],
+          "extension6": [
+            "3gp",
+            "3g2",
+            "aiff",
+            "asf",
+            "au",
+            "avi",
+            "flac",
+            "flv",
+            "m4a",
+            "m4p",
+            "mid",
+            "midi",
+            "rmi",
+            "mov",
+            "mp2",
+            "mp3",
+            "mp4",
+            "mpg4",
+            "m4v",
+            "mp4v",
+            "divx",
+            "mpg",
+            "m2v",
+            "ogg",
+            "rm",
+            "ram",
+            "swf",
+            "wav",
+            "wma",
+            "wmv",
+            "wm",
+            "wmz"
+          ],
+          "custom1": "Web Pages",
+          "custom2": "PDFs",
+          "custom3": "Presentations",
+          "custom4": "SpreadSheets",
+          "custom5": "Word & Text Docs",
+          "custom6": "Videos",
+          "custom7": "Others"
+        }
+      }
+    },
+    {
+      "date": {
+        "field": "meta.raw.UploadDate",
+        "target_field": "meta.raw.UploadDate",
+        "formats": [
+          "EEE MMM d HH:mm:ss zzz yyyy"
+        ],
+        "timezone": "UTC",
+        "ignore_failure": true
+      }
+    },
+    {
+      "script": {
+        "lang": "painless",
+        "source": "if (ctx.custom_meta_data.customFileType==params.custom1) {ctx.custom_meta_data.publishDate=ctx.meta.raw.PushDate} else {ctx.custom_meta_data.publishDate=ctx.meta.date}",
+        "params": {
+          "custom1": "Web Pages",
+          "custom2": "PDFs"
+        }
+      }
+    },
+    {
+      "lowercase": {
+        "field": "_index"
+      }
+    },
+    {
+      "script": {
+        "lang": "painless",
+        "source": "if (ctx._index==params.usptoreindex) {ctx._index='reidx-'+ctx.custom_meta_data.companyid} else {ctx._index='idx-'+ctx.custom_meta_data.companyid}"
+      }
+    },
+    {
+      "date": {
+        "field": "custom_meta_data.publishDate",
+        "target_field": "custom_meta_data.publicationDate",
+        "formats": [
+          "yyyy-MM-dd'T'HH:mm:ss",
+          "EEE MMM  d HH:mm:ss zzz yyyy"
+        ],
+        "timezone": "UTC",
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "path",
+          "file.filename",
+          "file.content_type",
+          "meta.format",
+          "meta.raw.date",
+          "meta.raw.modified",
+          "meta.raw.created",
+          "meta.raw.Creation-Date",
+          "meta.raw.resourceName",
+          "meta.raw.Author",
+          "meta.raw.producer",
+          "meta.raw.description",
+          "meta.raw.Last-Modified",
+          "meta.raw.title",
+          "meta.raw.Last-Save-Date",
+          "meta.raw.Content-Type",
+          "meta.raw.creator",
+          "meta.raw.access_permission:fill_in_form",
+          "meta.author",
+          "meta.created",
+          "meta.description",
+          "meta.raw.pdf:PDFVersion",
+          "meta.raw.pdf:docinfo:title",
+          "meta.raw.access_permission:can_print_degraded",
+          "meta.raw.subject",
+          "meta.raw.pdf:docinfo:custom:copyrightYear",
+          "meta.raw.dc:format",
+          "meta.raw.pdf:encrypted",
+          "meta.raw.cp:subject",
+          "meta.raw.pdf:docinfo:subject",
+          "meta.raw.pdf:docinfo:creator",
+          "meta.raw.meta:author",
+          "meta.raw.meta:creation-date",
+          "meta.raw.access_permission:extract_for_accessibility",
+          "meta.raw.pdf:docinfo:custom:UploadDate",
+          "meta.raw.pdf:docinfo:custom:title",
+          "meta.raw.pdf:docinfo:producer",
+          "meta.raw.dc:description",
+          "meta.raw.pdf:docinfo:created",
+          "meta.raw.access_permission:can_modify",
+          "meta.raw.pdf:docinfo:custom:copyright",
+          "meta.raw.access_permission:can_print",
+          "meta.raw.access_permission:extract_content",
+          "meta.raw.xmpTPg:NPages",
+          "meta.raw.access_permission:assemble_document",
+          "meta.raw.meta:save-date",
+          "meta.raw.pdf:docinfo:modified",
+          "meta.raw.dcterms:modified",
+          "meta.raw.dcterms:created",
+          "meta.raw.dc:creator",
+          "meta.raw.access_permission:modify_annotations",
+          "meta.raw.dc:title",
+          "meta.raw.X-Parsed-By"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "meta.raw.X-Parsed-By"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "meta.raw.dc:title"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "meta.raw.Content-Encoding"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "meta.raw.resourceName"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "meta.raw.Content-Type"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": [
+          "meta.raw.title"
+        ],
+        "on_failure": [
+          {
+            "remove": {
+              "field": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

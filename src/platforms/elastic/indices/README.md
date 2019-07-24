@@ -1,0 +1,1 @@
+This contains the actual indices (currently just one) that we use on ElasticSearch. These are excluded from the config scripts, because config scripts can be re-uploaded safely, while ElasticSearch has a special surgical syntax for updating indices, and just smashing a new file up to the API isn't it.

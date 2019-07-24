@@ -9,7 +9,9 @@
     "start": "nodemon --watch src --exec yarn babel-node -- src/index.js",
     "build": "babel src -d lib",
     "lint": "./node_modules/.bin/eslint 'src/**/*.js'",
-    "test": ""
+    "test": "",
+    "elastic:config:get": "babel-node -- src/platforms/elastic/scripts/getConfig",
+    "elastic:config:put": "babel-node -- src/platforms/elastic/scripts/putConfig"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -22,5 +24,11 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.14.2",
     "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "winston": "^3.2.1"
   }
 }

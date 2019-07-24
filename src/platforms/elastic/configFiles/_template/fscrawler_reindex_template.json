@@ -1,0 +1,45 @@
+{
+  "order": 0,
+  "template": "reidx-*",
+  "settings": {
+    "index": {
+      "analysis": {
+        "analyzer": {
+          "content_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "whitespace"
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "content": {
+          "type": "text",
+          "copy_to": "search_content"
+        },
+        "search_content": {
+          "type": "text",
+          "analyzer": "content_analyzer",
+          "store": true
+        },
+        "custom_meta_data": {
+          "properties": {
+            "title": {
+              "type": "text",
+              "copy_to": "search_content"
+            }
+          }
+        }
+      }
+    }
+  },
+  "aliases": {
+    "uspto-{index}": {}
+  }
+}

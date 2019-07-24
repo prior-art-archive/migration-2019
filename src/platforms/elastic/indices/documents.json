@@ -1,0 +1,18 @@
+{
+  "mappings": {
+    "doc": {
+      "properties": {
+        "text": { "type": "text" },
+        "title": { "type": "text" },
+        "fileUrl": { "type": "keyword" },
+        "organizationId": { "type": "keyword" },
+        "uploadDate": { "type": "date" },
+        "publicationDate": { "type": "date" },
+        "contentLength": { "type": "integer" },
+        "contentType": { "type": "keyword" },
+        "language": { "type": "keyword" },
+        "cpcCodes": { "type": "keyword" }
+      }
+    }
+  }
+}
