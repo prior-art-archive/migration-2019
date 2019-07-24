@@ -2,7 +2,7 @@ import rp from 'request-promise-native'
 
 import config from '../../config'
 import { getFileContents } from '../../utils'
-import { ELASTIC_MESSAGES, CONFIG_FILES } from './constants'
+import { ELASTIC_MESSAGES } from './constants'
 import { isValidEndpoint } from './utils'
 
 /**
@@ -12,7 +12,7 @@ import { isValidEndpoint } from './utils'
  * @return {Promise}         Promise that resolves when the request resolves
  */
 export const getConfig = endpoint => new Promise((resolve, reject) => {
-  if (!isValidEndpoint(endpoint)) reject(new Error(ELASTIC_MESSAGES.INVALID_ENDPOINT))
+  if (!isValidEndpoint(endpoint)) reject(new Error(ELASTIC_MESSAGES.INVALID_ARGUMENT))
 
   rp.get(`${config.ELASTICSEARCH_URL}/${endpoint}`)
     .then(response => resolve(response))
@@ -28,7 +28,7 @@ export const getConfig = endpoint => new Promise((resolve, reject) => {
  * @return {Promise}         Promise that resolves when the file uploads, or rejects if in error
  */
 export const putConfig = endpoint => new Promise((resolve, reject) => {
-  if (!isValidEndpoint(endpoint)) reject(new Error(ELASTIC_MESSAGES.INVALID_ENDPOINT))
+  if (!isValidEndpoint(endpoint)) reject(new Error(ELASTIC_MESSAGES.INVALID_ARGUMENT))
 
   const absolutePathToLocalConfigFile = `${__dirname}/configFiles/${endpoint}.json`
   try {
@@ -44,11 +44,3 @@ export const putConfig = endpoint => new Promise((resolve, reject) => {
     reject(new Error(`${ELASTIC_MESSAGES.UNREADABLE_CONFIG}: ${endpoint}`))
   }
 })
-
-/**
- * Uploads all the ElasticSearch config files listed in the `CONFIG_FILE` constant, silently
- * filtered by apparent validity.
- *
- * @return {Promise} Promise that resolves when all the config files resolve
- */
-export const putAllConfigs = () => Promise.all(CONFIG_FILES.filter(isValidEndpoint).map(putConfig))

@@ -18,8 +18,10 @@ export const CONFIG_FILES = [
 ]
 
 export const ELASTIC_MESSAGES = {
-  UPLOAD_SUCCESS: 'Successfully uploaded config',
-  INVALID_ENDPOINT: 'You need to provide a valid endpoint argument',
+  UPLOADING_FILE: 'Uploading config file',
+  UPLOAD_SUCCESS: 'Successfully uploaded config file',
+  INVALID_ARGUMENT: 'You need to provide a valid endpoint argument',
+  INVALID_ENDPOINT: 'Invalid endpoint',
   UNREADABLE_CONFIG: 'Could not read the config file from the filesystem',
   EMPTY_CONFIG: 'Empty config file',
 }
