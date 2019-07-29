@@ -16,7 +16,7 @@ The specific steps (which may be spread across a different number of individual 
 
 ### For v2-dev…
 
-1. Setup/configure dev ElasticSearch 5.6.16 deployments
+1. Setup/configure dev ElasticSearch 5.6.16 deployment
 2. Empty dev Postgres database and S3 bucket
 3. Copy v2-prod's Postgres **schema** to dev
 4. Copy v2-prod's Postgres `Organization` and `Signup` table **data** to v2-dev
@@ -30,7 +30,7 @@ The specific steps (which may be spread across a different number of individual 
 
 Once we've got things working in dev, we can move on to prod.
 
-1. Setup/configure prod ElasticSearch 5.6.16 deployments
+1. Setup/configure prod ElasticSearch 5.6.16 deployment
 2. Re-index existing v2-prod data (unsure how; at worst, download/reupload all `priorart-sftp-prod` contents and relevant drag-and-drop uploads)
 3. Migrate v1-prod's data from S3 (`prior-art-archive-sftp` → `priorart-sftp-prod`)
 
