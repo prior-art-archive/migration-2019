@@ -14,16 +14,26 @@ yarn install
 
 The specific steps (which may be spread across a different number of individual scripts) will be:
 
-1. Setup fresh v2-dev and v2-prod ElasticSearch 5.6.16 deployments
-2. Ensure v2-dev and v2-prod are using the same version/configuration of Postgres
-3. Empty v2-dev Postgres database and S3 bucket
-4. Copy v2-prod Postgres **schema** to v2-dev
-5. Copy v2-prod Postgres Organization and Signup table **data** to v2-dev
-6. Generate mapping of v1-prod organization IDs to v2-prod organization IDs
-7. Copy v2-prod S3 objects to v2-dev
-8. Copy v1-prod S3 objects to v2-dev using ID mappings generated above and without duplicating existing files
+### For v2-dev…
 
-From what we learn above, we will write the subsequent following scripts:
+1. Setup/configure dev ElasticSearch 5.6.16 deployments
+2. Empty dev Postgres database and S3 bucket
+3. Copy v2-prod's Postgres **schema** to dev
+4. Copy v2-prod's Postgres `Organization` and `Signup` table **data** to v2-dev
+5. Upload files to `v2-dev` and debug search until it's no longer throwing parsing errors
+6. Copy v2-prod's FTP uploads from S3 (`priorart-sftp-prod`) to v2-dev
+7. Copy v1-prod's FTP uploads from S3 (`prior-art-archive-sftp`) to v2-dev (`priorart-sftp-prod`) using slug mappings
+8. Test searching on this larger data set to expected ensure results are returned
+9. Once all the above is working on dev, setup/configure an ElasticSearch 5.6.16 deployment for prod, point v2-prod to it, and import 
 
-1. One-time script to copy all v1-prod S3 objects to v2-prod, mapping IDs and skipping duplicates.
-2. Script to periodically clone v2-prod data to v2-dev. (Code and schema will be kept in sync through migrations and other normal deployment methods; this is about getting production data into development for us to safely tinker with it.)
+### For v2-prod…
+
+Once we've got things working in dev, we can move on to prod.
+
+1. Setup/configure prod ElasticSearch 5.6.16 deployments
+2. Re-index existing v2-prod data (unsure how; at worst, download/reupload all `priorart-sftp-prod` contents and relevant drag-and-drop uploads)
+3. Migrate v1-prod's data from S3 (`prior-art-archive-sftp` → `priorart-sftp-prod`)
+
+## ID Mappings
+
+When we ported v1-prod's Postgres data to v2-prod, we didn't preserve primary keys. Thus, the organization IDs (known as company IDs in v1-prod) all changed. (Happily, the slugs remained the same.) It's important to know these because various places, such as the `s3://assets.priorartarchive.org/uploads` directory, are keyed by this ID, and we need to be able to know what company/organization this ID corresponds to. This mapping has been completed in [#8](https://github.com/prior-art-archive/migration-2019/issues/8).
